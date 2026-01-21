@@ -1,6 +1,8 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import routes from './routes';
+import { errorHandler, notFoundHandler } from './middlewares';
 
 // Load environment variables
 dotenv.config();
@@ -25,6 +27,15 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/health', (_, res) => {
     res.status(200).json({ status: 'OK' });
 });
+
+// API routes
+app.use('/api', routes);
+
+// 404 handler
+app.use(notFoundHandler);
+
+// Global error handler
+app.use(errorHandler);
 
 // Start server
 const PORT = process.env.PORT || 5000;
