@@ -14,5 +14,8 @@ export const users = mysqlTable("users", {
     role: mysqlEnum("role", ["admin", "employee"])
         .notNull()
         .default("employee"),
-    createdAt: timestamp("created_at").defaultNow(),
+    created_at: timestamp("created_at").defaultNow(),
+    updated_at: timestamp("updated_at")
+        .defaultNow()
+        .onUpdateNow(),
 });

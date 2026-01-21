@@ -14,19 +14,19 @@ export interface User {
     email: string;
     password: string;
     role: 'admin' | 'employee';
-    created_at: Date;
-    updated_at: Date;
+    created_at: Date | null;
+    updated_at: Date | null;
 }
 
 export interface Task {
     id: number;
     title: string;
-    description: string;
+    description: string | null;
     assigned_to: number;
     status: 'pending' | 'in_progress' | 'completed';
-    due_date: string;
-    created_at: Date;
-    updated_at: Date;
+    due_date: Date | null;
+    created_at: Date | null;
+    updated_at: Date | null;
 }
 
 export interface TaskWithUser extends Task {

@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { TaskController } from '../controllers';
 import {
-    createTaskValidator,
-    updateTaskValidator,
-    taskIdValidator,
-    userIdValidator,
     validate,
+    createTaskSchema,
+    updateTaskBodySchema,
+    taskIdSchema,
+    userIdSchema,
 } from '../validators';
 import { authenticate, authorize } from '../middlewares';
 
@@ -22,8 +22,7 @@ router.use(authenticate);
 router.post(
     '/',
     authorize('admin'),
-    createTaskValidator,
-    validate,
+    validate(createTaskSchema),
     TaskController.createTask
 );
 
@@ -40,14 +39,14 @@ router.get('/', TaskController.getAllTasks);
  * @desc    Get task by ID
  * @access  Private
  */
-router.get('/:id', taskIdValidator, validate, TaskController.getTaskById);
+router.get('/:id', validate(taskIdSchema, "params"), TaskController.getTaskById);
 
 /**
  * @route   PUT /api/tasks/:id
  * @desc    Update task (Admin: all fields, Employee: status only for own tasks)
  * @access  Private
  */
-router.put('/:id', updateTaskValidator, validate, TaskController.updateTask);
+router.put('/:id', validate(taskIdSchema, "params"), validate(updateTaskBodySchema), TaskController.updateTask);
 
 /**
  * @route   DELETE /api/tasks/:id
@@ -57,8 +56,7 @@ router.put('/:id', updateTaskValidator, validate, TaskController.updateTask);
 router.delete(
     '/:id',
     authorize('admin'),
-    taskIdValidator,
-    validate,
+    validate(taskIdSchema, "params"),
     TaskController.deleteTask
 );
 
@@ -69,8 +67,8 @@ router.delete(
  */
 router.get(
     '/users/:id/tasks',
-    userIdValidator,
-    validate,
+    validate(userIdSchema),
+    validate(userIdSchema, "params"),
     TaskController.getUserTasks
 );
 

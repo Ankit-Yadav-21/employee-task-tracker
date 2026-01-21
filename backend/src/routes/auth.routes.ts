@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { AuthController } from '../controllers';
-import { registerValidator, loginValidator, validate } from '../validators';
+import { registerSchema, validate, loginSchema } from '../validators';
 import { authenticate } from '../middlewares';
 
 const router = Router();
@@ -10,14 +10,14 @@ const router = Router();
  * @desc    Register a new user
  * @access  Public
  */
-router.post('/register', registerValidator, validate, AuthController.register);
+router.post('/register', validate(registerSchema), AuthController.register);
 
 /**
  * @route   POST /api/auth/login
  * @desc    Login user and get JWT token
  * @access  Public
  */
-router.post('/login', loginValidator, validate, AuthController.login);
+router.post('/login', validate(loginSchema), AuthController.login);
 
 /**
  * @route   GET /api/auth/me

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { UserController } from '../controllers';
-import { userIdValidator, validate } from '../validators';
+import { userIdSchema, validate } from '../validators';
 import { authenticate, authorize } from '../middlewares';
 
 const router = Router();
@@ -20,20 +20,20 @@ router.get('/', UserController.getAllUsers);
  * @desc    Get user by ID
  * @access  Private/Admin
  */
-router.get('/:id', userIdValidator, validate, UserController.getUserById);
+router.get('/:id', validate(userIdSchema, "params"), UserController.getUserById);
 
 /**
  * @route   PUT /api/users/:id
  * @desc    Update user
  * @access  Private/Admin
  */
-router.put('/:id', userIdValidator, validate, UserController.updateUser);
+router.put('/:id', validate(userIdSchema, "params"), UserController.updateUser);
 
 /**
  * @route   DELETE /api/users/:id
  * @desc    Delete user
  * @access  Private/Admin
  */
-router.delete('/:id', userIdValidator, validate, UserController.deleteUser);
+router.delete('/:id', validate(userIdSchema, "params"), UserController.deleteUser);
 
 export default router;
