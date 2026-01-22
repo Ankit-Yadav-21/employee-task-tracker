@@ -18,15 +18,11 @@ COPY drizzle.config.ts tsconfig.json ./
 # Use --no-frozen-lockfile in case lockfile needs updates during build
 RUN pnpm install --no-frozen-lockfile --ignore-scripts
 
-# Copy entrypoint script
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
 # Copy source code (will be overridden by volume mount in development)
 COPY . .
 
 # Expose port
 EXPOSE 5000
 
-# Use entrypoint script
-ENTRYPOINT ["/entrypoint.sh"]
+# Use entrypoint script with explicit shell
+ENTRYPOINT ["pnpm", "dev"]
