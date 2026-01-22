@@ -1,8 +1,10 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import morgan from 'morgan';
 import routes from './routes';
 import { errorHandler, notFoundHandler } from './middlewares';
+import logger from './utils/logger';
 
 // Load environment variables
 dotenv.config();
@@ -15,13 +17,18 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Request logging middleware (development only)
-if (process.env.NODE_ENV === 'development') {
-    app.use((req, _, next) => {
-        console.log(`${req.method} ${req.path}`);
-        next();
-    });
-}
+// HTTP request logger middleware (morgan)
+const morganFormat = process.env.NODE_ENV === 'production' 
+    ? 'combined' 
+    : 'dev';
+
+app.use(morgan(morganFormat, {
+    stream: {
+        write: (message: string) => {
+            logger.http(message.trim());
+        }
+    }
+}));
 
 // Health routes
 app.use('/health', (_, res) => {
@@ -41,13 +48,21 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-    console.log(`Server is running on: http://localhost:${PORT}`);
+    logger.info(`🚀 Server is running on: http://localhost:${PORT}`);
+    logger.info(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
 });
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err: Error) => {
-    console.error('❌ UNHANDLED REJECTION! Shutting down...');
-    console.error(err.name, err.message);
+    logger.error('❌ UNHANDLED REJECTION! Shutting down...', { error: err });
+    logger.error(`Error: ${err.name} - ${err.message}`);
+    process.exit(1);
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (err: Error) => {
+    logger.error('❌ UNCAUGHT EXCEPTION! Shutting down...', { error: err });
+    logger.error(`Error: ${err.name} - ${err.message}`);
     process.exit(1);
 });
 

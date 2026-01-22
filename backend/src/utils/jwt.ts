@@ -18,7 +18,7 @@ export class JWTUtils {
             role: user.role,
         };
 
-        return jwt.sign(payload, this.secret, { expiresIn: this.expiresIn });
+        return jwt.sign(payload, this.secret, { expiresIn: this.expiresIn as string });
     }
 
     static verifyToken(token: string): JWTPayload {

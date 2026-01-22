@@ -42,7 +42,8 @@ export class AuthController {
     static getCurrentUser = asyncHandler(
         async (req: AuthRequest, res: Response) => {
             if (!req.user) {
-                return ResponseHandler.error(res, 'User not authenticated', 401);
+                ResponseHandler.error(res, 'User not authenticated', 401);
+                return;
             }
 
             const user = await AuthService.getCurrentUser(req.user.id);

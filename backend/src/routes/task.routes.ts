@@ -5,7 +5,6 @@ import {
     createTaskSchema,
     updateTaskBodySchema,
     taskIdSchema,
-    userIdSchema,
 } from '../validators';
 import { authenticate, authorize } from '../middlewares';
 

@@ -71,25 +71,81 @@ employee-task-tracker/
 
 ## Prerequisites
 
-- **Node.js** (v18 or higher)
-- **pnpm** (or npm/yarn)
-- **MySQL** (v8.0 or higher) or use Docker Compose
+- **Docker** and **Docker Compose** (for Docker setup)
+- OR **Node.js** (v18 or higher) and **pnpm** (for local setup)
+- **MySQL** (v8.0 or higher) if running locally
 
-## Setup Instructions
+## Quick Start with Docker (Recommended)
+
+The easiest way to run the entire application:
+
+```bash
+# Clone the repository
+git clone https://github.com/Ankit-Yadav-21/employee-task-tracker.git
+cd employee-task-tracker
+
+# Start all services (Database, Backend, Frontend)
+docker-compose up --build
+```
+
+This single command will:
+1. ✅ Start MySQL database
+2. ✅ Build and start the backend server
+3. ✅ Build and start the frontend server
+4. ✅ Automatically run database migrations
+5. ✅ Set up all necessary connections
+
+**Access the application:**
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:5000/api
+- MySQL: localhost:3306
+
+**Stop all services:**
+```bash
+docker-compose down
+```
+
+**View logs:**
+```bash
+docker-compose logs -f
+```
+
+**Database credentials (Docker):**
+- Database: `employee_task_db`
+- Root Password: `root`
+- User: `app_user`
+- Password: `app_password`
+
+**First-time setup:**
+1. Wait for all services to start (check logs: `docker-compose logs -f`)
+2. Register a user through the frontend at http://localhost:5173/register
+3. To make a user admin, connect to MySQL and run:
+   ```sql
+   UPDATE users SET role = 'admin' WHERE email = 'your-email@example.com';
+   ```
+   Or use the MySQL container:
+   ```bash
+   docker exec -it employee-task-mysql mysql -u root -proot employee_task_db
+   UPDATE users SET role = 'admin' WHERE email = 'your-email@example.com';
+   ```
+
+## Manual Setup Instructions
+
+If you prefer to run services locally without Docker:
 
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/Ankit-Yadav-21/employee-task-tracker.git
 cd employee-task-tracker
 ```
 
 ### 2. Database Setup
 
-#### Option A: Using Docker Compose (Recommended)
+#### Option A: Using Docker Compose (MySQL only)
 
 ```bash
-docker-compose up -d
+docker-compose up -d mysql
 ```
 
 This will start a MySQL container with:
@@ -103,7 +159,7 @@ This will start a MySQL container with:
 
 #### Option B: Using Local MySQL
 
-Create a MySQL database named `task_tracker` and update the `.env` file accordingly.
+Create a MySQL database named `employee_task_db` and update the `.env` file accordingly.
 
 ### 3. Backend Setup
 

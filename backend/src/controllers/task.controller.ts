@@ -27,7 +27,8 @@ export class TaskController {
             const user = req.user;
 
             if (!user) {
-                return ResponseHandler.error(res, 'User not authenticated', 401);
+                ResponseHandler.error(res, 'User not authenticated', 401);
+                return;
             }
 
             let tasks;
@@ -76,7 +77,8 @@ export class TaskController {
             const { title, description, assigned_to, status, due_date } = req.body;
 
             if (!req.user) {
-                return ResponseHandler.error(res, 'User not authenticated', 401);
+                ResponseHandler.error(res, 'User not authenticated', 401);
+                return;
             }
 
             const task = await TaskService.updateTask(
@@ -106,14 +108,16 @@ export class TaskController {
             const user = req.user;
 
             if (!user) {
-                return ResponseHandler.error(res, 'User not authenticated', 401);
+                ResponseHandler.error(res, 'User not authenticated', 401);
+                return;
             }
 
             const userId = Number(id);
 
             // Employees can only view their own tasks
             if (user.role === 'employee' && user.id !== userId) {
-                return ResponseHandler.error(res, 'You can only view your own tasks', 403);
+                ResponseHandler.error(res, 'You can only view your own tasks', 403);
+                return;
             }
 
             const tasks = await TaskService.getTasksByUserId(userId);
