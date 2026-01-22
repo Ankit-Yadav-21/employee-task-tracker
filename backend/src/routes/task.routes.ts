@@ -67,7 +67,6 @@ router.delete(
  */
 router.get(
     '/users/:id/tasks',
-    validate(userIdSchema),
     validate(userIdSchema, "params"),
     TaskController.getUserTasks
 );

@@ -8,7 +8,7 @@ interface JWTPayload {
 }
 
 export class JWTUtils {
-    private static readonly secret = process.env.JWT_SECRET || 'fallback-secret-key';
+    private static readonly secret = process.env.JWT_SECRET as string || 'fallback-secret-key';
     private static readonly expiresIn = process.env.JWT_EXPIRES_IN || '7d';
 
     static generateToken(user: Pick<User, 'id' | 'email' | 'role'>): string {
