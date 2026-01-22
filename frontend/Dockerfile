@@ -18,5 +18,5 @@ COPY . .
 # Expose port
 EXPOSE 5173
 
-# Use entrypoint script with explicit shell
-ENTRYPOINT ["pnpm", "dev", "--host", "0.0.0.0"]
+# Start the development server
+CMD ["pnpm", "dev", "--host", "0.0.0.0"]
