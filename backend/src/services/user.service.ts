@@ -7,6 +7,10 @@ export class UserService {
         return UserModel.findAll();
     }
 
+    static async getAllEmployees(): Promise<Omit<User, 'password'>[]> {
+        return UserModel.findAllEmployees();
+    }
+
     static async getUserById(id: number): Promise<Omit<User, 'password'>> {
         try {
             const user = await UserModel.findById(id);

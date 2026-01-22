@@ -11,8 +11,20 @@ export class UserController {
 
             ResponseHandler.success(
                 res,
-                { users, count: users.length },
+                users,
                 'Users retrieved successfully'
+            );
+        }
+    );
+
+    static getAllEmployees = asyncHandler(
+        async (_req: AuthRequest, res: Response, _next: NextFunction) => {
+            const users = await UserService.getAllEmployees();
+
+            ResponseHandler.success(
+                res,
+                users,
+                'Employees retrieved successfully'
             );
         }
     );

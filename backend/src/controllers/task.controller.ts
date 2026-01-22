@@ -37,7 +37,7 @@ export class TaskController {
 
             ResponseHandler.success(
                 res,
-                { tasks, count: tasks.length },
+                tasks,
                 'Tasks retrieved successfully'
             );
         }
@@ -91,7 +91,7 @@ export class TaskController {
 
             ResponseHandler.success(
                 res,
-                { tasks, count: tasks.length },
+                tasks,
                 'User tasks retrieved successfully'
             );
         }

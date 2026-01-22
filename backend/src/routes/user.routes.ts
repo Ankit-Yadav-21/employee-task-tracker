@@ -16,6 +16,13 @@ router.use(authenticate, authorize('admin'));
 router.get('/', UserController.getAllUsers);
 
 /**
+ * @route   GET /api/users
+ * @desc    Get all users
+ * @access  Private/Admin
+ */
+router.get('/employees', UserController.getAllEmployees);
+
+/**
  * @route   GET /api/users/:id
  * @desc    Get user by ID
  * @access  Private/Admin

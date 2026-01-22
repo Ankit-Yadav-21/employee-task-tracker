@@ -68,6 +68,21 @@ export class UserModel {
             .orderBy(users.created_at);
     }
 
+    static async findAllEmployees() {
+        return db
+            .select({
+                id: users.id,
+                name: users.name,
+                email: users.email,
+                role: users.role,
+                created_at: users.created_at,
+                updated_at: users.updated_at,
+            })
+            .from(users)
+            .where(eq(users.role, "employee"))
+            .orderBy(users.created_at);
+    }
+
     static async update(
         id: number,
         userData: Partial<{
