@@ -2,6 +2,7 @@ export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localho
 
 export const ROUTES = {
     LOGIN: '/login',
+    REGISTER: '/register',
     ADMIN_DASHBOARD: '/admin',
     EMPLOYEE_DASHBOARD: '/employee',
 } as const;
@@ -10,6 +11,11 @@ export const TASK_STATUS_OPTIONS = [
     { value: 'pending', label: 'Pending' },
     { value: 'in_progress', label: 'In Progress' },
     { value: 'completed', label: 'Completed' },
+] as const;
+
+export const ROLE_OPTIONS = [
+    { value: 'employee', label: 'Employee' },
+    { value: 'admin', label: 'Admin' },
 ] as const;
 
 export const TASK_STATUS_COLORS = {

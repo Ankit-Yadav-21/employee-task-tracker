@@ -18,6 +18,13 @@ export interface Task {
     assignedUser?: User;
 }
 
+export interface RegisterCredentials {
+    name: string;
+    email: string;
+    password: string;
+    role: string;
+}
+
 export interface LoginCredentials {
     email: string;
     password: string;

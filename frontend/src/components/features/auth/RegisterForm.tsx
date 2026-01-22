@@ -6,11 +6,17 @@ import { Button } from "../../common/Button";
 import { Input } from "../../common/Input";
 import { ErrorMessage } from "../../common/ErrorMessage";
 import { handleApiError } from "../../../utils/errorHandler";
-import { ROUTES } from "../../../config/constants";
+import { ROLE_OPTIONS, ROUTES } from "../../../config/constants";
+import { RegisterCredentials } from "../../../types";
+import { Select } from "../../common/Select";
 
-export const LoginForm: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export const RegisterForm: React.FC = () => {
+  const [form, setFrom] = useState<RegisterCredentials>({
+    name: "",
+    email: "",
+    password: "",
+    role: "",
+  });
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -23,7 +29,7 @@ export const LoginForm: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await authService.login({ email, password });
+      const response = await authService.register(form);
       setAuth(response.user, response.token);
 
       // Redirect based on role
@@ -44,10 +50,19 @@ export const LoginForm: React.FC = () => {
       {error && <ErrorMessage message={error} onClose={() => setError(null)} />}
 
       <Input
+        type="text"
+        label="Name"
+        value={form?.name}
+        onChange={(e) => setFrom({ ...form, name: e.target.value })}
+        placeholder="Your Name"
+        required
+      />
+
+      <Input
         type="email"
         label="Email Address"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        value={form?.email}
+        onChange={(e) => setFrom({ ...form, email: e.target.value })}
         placeholder="your@email.com"
         required
         autoComplete="email"
@@ -56,24 +71,34 @@ export const LoginForm: React.FC = () => {
       <Input
         type="password"
         label="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        value={form?.password}
+        onChange={(e) => setFrom({ ...form, password: e.target.value })}
         placeholder="••••••••"
         required
         autoComplete="current-password"
       />
 
+      <Select
+        label="Status"
+        value={form?.role}
+        onChange={(e) => setFrom({ ...form, role: e.target.value })}
+        options={ROLE_OPTIONS.map((opt) => ({
+          value: opt.value,
+          label: opt.label,
+        }))}
+      />
+
       <Button type="submit" className="w-full" isLoading={isLoading}>
-        Sign In
+        Sign Up
       </Button>
 
       <Button
         type="button"
         variant="secondary"
         className="w-full"
-        onClick={() => navigate(ROUTES.REGISTER)}
+        onClick={() => navigate(ROUTES.LOGIN)}
       >
-        Sign Up
+        Sign In
       </Button>
     </form>
   );

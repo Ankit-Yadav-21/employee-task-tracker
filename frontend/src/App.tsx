@@ -5,6 +5,7 @@ import { Login } from "./pages/Login";
 import { AdminDashboard } from "./pages/AdminDashboard";
 import { EmployeeDashboard } from "./pages/EmployeeDashboard";
 import { ROUTES } from "./config/constants";
+import { Register } from "./pages/Register";
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{
@@ -28,6 +29,7 @@ const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path={ROUTES.REGISTER} element={<Register />} />
         <Route path={ROUTES.LOGIN} element={<Login />} />
 
         <Route
