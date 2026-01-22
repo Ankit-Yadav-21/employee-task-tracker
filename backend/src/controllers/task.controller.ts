@@ -24,15 +24,32 @@ export class TaskController {
     static getAllTasks = asyncHandler(
         async (req: AuthRequest, res: Response, _next: NextFunction) => {
             const { status } = req.query;
+            const user = req.user;
+
+            if (!user) {
+                return ResponseHandler.error(res, 'User not authenticated', 401);
+            }
 
             let tasks;
 
-            if (status && ['pending', 'in_progress', 'completed'].includes(status as string)) {
-                tasks = await TaskService.getTasksByStatus(
-                    status as 'pending' | 'in_progress' | 'completed'
-                );
+            // If user is employee, only show their tasks
+            if (user.role === 'employee') {
+                if (status && ['pending', 'in_progress', 'completed'].includes(status as string)) {
+                    // Get user's tasks and filter by status
+                    const allUserTasks = await TaskService.getTasksByUserId(user.id);
+                    tasks = allUserTasks.filter(t => t.status === status);
+                } else {
+                    tasks = await TaskService.getTasksByUserId(user.id);
+                }
             } else {
-                tasks = await TaskService.getAllTasks();
+                // Admin can see all tasks
+                if (status && ['pending', 'in_progress', 'completed'].includes(status as string)) {
+                    tasks = await TaskService.getTasksByStatus(
+                        status as 'pending' | 'in_progress' | 'completed'
+                    );
+                } else {
+                    tasks = await TaskService.getAllTasks();
+                }
             }
 
             ResponseHandler.success(
@@ -86,8 +103,20 @@ export class TaskController {
     static getUserTasks = asyncHandler(
         async (req: AuthRequest, res: Response, _next: NextFunction) => {
             const { id } = req.params;
+            const user = req.user;
 
-            const tasks = await TaskService.getTasksByUserId(Number(id));
+            if (!user) {
+                return ResponseHandler.error(res, 'User not authenticated', 401);
+            }
+
+            const userId = Number(id);
+
+            // Employees can only view their own tasks
+            if (user.role === 'employee' && user.id !== userId) {
+                return ResponseHandler.error(res, 'You can only view your own tasks', 403);
+            }
+
+            const tasks = await TaskService.getTasksByUserId(userId);
 
             ResponseHandler.success(
                 res,

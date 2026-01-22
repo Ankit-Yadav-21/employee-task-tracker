@@ -60,15 +60,4 @@ router.delete(
     TaskController.deleteTask
 );
 
-/**
- * @route   GET /api/users/:id/tasks
- * @desc    Get all tasks for a specific user
- * @access  Private
- */
-router.get(
-    '/users/:id/tasks',
-    validate(userIdSchema, "params"),
-    TaskController.getUserTasks
-);
-
 export default router;

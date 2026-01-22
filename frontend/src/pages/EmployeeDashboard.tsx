@@ -26,7 +26,8 @@ export const EmployeeDashboard: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await taskService.getAllTasks();
+      // Use getUserTasks to get only this employee's tasks
+      const data = await taskService.getUserTasks(user.id);
       setTasks(data);
     } catch (err) {
       setError(handleApiError(err));

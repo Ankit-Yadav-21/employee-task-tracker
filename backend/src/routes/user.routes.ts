@@ -1,12 +1,23 @@
 import { Router } from 'express';
-import { UserController } from '../controllers';
+import { UserController, TaskController } from '../controllers';
 import { userIdSchema, validate } from '../validators';
 import { authenticate, authorize } from '../middlewares';
 
 const router = Router();
 
-// All routes require authentication and admin role
-router.use(authenticate, authorize('admin'));
+// All routes require authentication
+router.use(authenticate);
+
+/**
+ * @route   GET /api/users/:id/tasks
+ * @desc    Get all tasks for a specific user
+ * @access  Private (Admin can access any user, Employee can only access their own)
+ * @note    This route must come before admin-only routes to allow employees to access their own tasks
+ */
+router.get('/:id/tasks', validate(userIdSchema, "params"), TaskController.getUserTasks);
+
+// All routes below require admin role
+router.use(authorize('admin'));
 
 /**
  * @route   GET /api/users
@@ -16,8 +27,8 @@ router.use(authenticate, authorize('admin'));
 router.get('/', UserController.getAllUsers);
 
 /**
- * @route   GET /api/users
- * @desc    Get all users
+ * @route   GET /api/users/employees
+ * @desc    Get all employees
  * @access  Private/Admin
  */
 router.get('/employees', UserController.getAllEmployees);
